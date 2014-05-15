@@ -3,9 +3,11 @@ package hlmp.CommLayer;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map.Entry;
 import java.util.Random;
 import java.util.UUID;
 
+import android.util.Log;
 import hlmp.CommLayer.Constants.*;
 import hlmp.CommLayer.Exceptions.ArgumentOutOfRangeException;
 import hlmp.CommLayer.Interfaces.RouterMessageErrorHandlerI;
@@ -306,6 +308,7 @@ public class Router {
 	 */
 	private void send(Message message) throws ArgumentOutOfRangeException
 	{
+		
 		if (message.getMetaType() == MessageMetaType.MULTICAST)
 		{
 			MulticastMessage multicastMessage = (MulticastMessage)message;
@@ -563,19 +566,19 @@ public class Router {
     public void proccessNotSentMessage() throws ArgumentOutOfRangeException, InterruptedException
     {
         Message message = notSentMessageQueue.draw();
-        System.out.println("processNotSentMessage");
+        Log.d("proccessNotSentMessage", "Tipo de mensaje: "+ message.getMetaType());
         switch(message.getMetaType())
         {
 	        case MessageMetaType.MULTICAST:
-//	        	System.out.println("multicast");
+	        	//System.out.println("multicast");
 	        case MessageMetaType.SAFEMULTICAST:
-//	        	System.out.println("safe multi");
+	        	//System.out.println("safe multi");
 	        case MessageMetaType.UNICAST:
-//	        	System.out.println("uni");
+	        	//System.out.println("uni");
 	        case MessageMetaType.SAFEUNICAST:
-//	        	System.out.println("safe multi");
+	        	//System.out.println("safe multi");
 	        case MessageMetaType.FASTUNICAST:
-//	        	System.out.println("fast uni");
+	        	//System.out.println("fast uni");
 	        	send(message);
 	        	break;
 	        default: return;
@@ -729,12 +732,20 @@ public class Router {
      * @param netUser Los datos del usuario local
      * @param netUserList La lista de usuarios de la red
      */
-    public void updateRouterTable(NetHandler netHandler, NetUser netUser, NetUserList netUserList)
+    public void updateRouterTable(NetHandler netHandler, NetUser netUser, NetUserList netUserList, String tag)
     {
         this.netHandler = netHandler;
         this.netUser = netUser;
         this.netUserList = netUserList;
-
+        Log.d(tag, " -----------Usuarios------------" );
+        Log.d(tag, "soy :"+ netUser.getId().toString());
+        for (Entry<InetAddress, NetUser> elem : this.netUserList.getUsersCollection().entrySet()){
+        	Log.d(tag, "elementos id: "+elem.getKey() + "elementos valor: " + elem.getValue() );
+        }
+        for (UUID la_ : this.netUser.getNeighborhoodIds()){
+        	Log.d(tag, "vecinos :"+ la_.toString() );
+        }
+        Log.d(tag, "  -----------Usuarios -fin ------------   ");
         int newMessageNumber = nMessagesCounted;
         nMessagesCounted = 0;
         //int neighborhoodSize = netUser.getNeighborhoodIds().length;

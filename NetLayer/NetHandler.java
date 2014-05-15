@@ -11,6 +11,7 @@ import java.net.SocketTimeoutException;
 import java.net.SocketException;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import android.util.Log;
 import hlmp.NetLayer.Constants.NetHandlerState;
 import hlmp.NetLayer.Constants.WifiConnectionState;
 import hlmp.NetLayer.Interfaces.ResetIpHandler;
@@ -19,7 +20,8 @@ import hlmp.Tools.BitConverter;
 
 
 public class NetHandler implements ResetIpHandler {
-
+	
+	private String nameTagLog = "NetHandler";
 	private ServerSocket tcpListener;
 	private NetHandler myself;
 	
@@ -182,7 +184,8 @@ public class NetHandler implements ResetIpHandler {
 	public void disconnect()
 	{
 //		TODO: fvalverd parametrizar los valores 0 y 1 por CONECTADO y DESCONECTADO para stopPoint
-		log("NETHANDLER: disconnect...");
+		Log.d(nameTagLog, "Comienzo de la desconexion de la red");
+		
 		if(stopPoint.compareAndSet(0, 1))
 		{
 			synchronized(connectLock)
@@ -194,13 +197,13 @@ public class NetHandler implements ResetIpHandler {
 				}
 				catch (Exception e)
 				{
-					log("NETHANDLER: disconnect aborting start " + e.getMessage());
+					Log.e(nameTagLog, "disconnect aborting start " + e.getMessage());
 				}
 				stop(false);
 				stopPoint.set(0); 
 			}
 		} 
-		log("NETHANDLER: disconnect... OK");
+		Log.d(nameTagLog, "Desconexion exitosa");
 	}
 
 
@@ -212,7 +215,7 @@ public class NetHandler implements ResetIpHandler {
 	{
 		return new Thread(){
 			public void run(){
-				log("NETHANDLER: RESET...");
+				Log.d(nameTagLog, " RESET de la red");
 				synchronized(resetLock)
 				{
 					commHandler.resetNetworkingHandler();
@@ -223,16 +226,17 @@ public class NetHandler implements ResetIpHandler {
 					}
 					catch (InterruptedException e)
 					{
+						Log.e(nameTagLog, "Interrupted restart the thread: "+ e);
 					}
 					catch (Exception e)
 					{
-						log("NETHANDLER: error on  restart startThread");
+						Log.e(nameTagLog, "Error on restart the thread: "+ e);
 					}
 
 					myself.stop(true);
 					connect();
 				}
-				log("NETHANDLER: RESET... OK");
+				Log.d(nameTagLog,"RESET... OK" );
 			}
 		};
 		
@@ -288,9 +292,9 @@ public class NetHandler implements ResetIpHandler {
 	                		throw new Exception("adhoc Failed!");
 	                	}
 	                	Thread.sleep(1000);
-	                	log("wifiHandler.state=" + wifiHandler.getConnectionState());
+	                	//log("wifiHandler.state=" + wifiHandler.getConnectionState());
 	                }
-	                log("wifiHandler.state=" + wifiHandler.getConnectionState());
+	                //log("wifiHandler.state=" + wifiHandler.getConnectionState());
 	                netData.setIpTcpListener(wifiHandler.getInetAddress());
 	                
 	                log("NETHANDLER: start wifi... OK");

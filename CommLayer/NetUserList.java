@@ -109,6 +109,10 @@ public class NetUserList {
     {
     	return usersCollection.size(); 
     }
+    
+    public synchronized HashMap<InetAddress, NetUser> getUsersCollection(){
+    	return usersCollection;
+    }
 
 	@Override
 	public synchronized String toString() {

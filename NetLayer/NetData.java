@@ -2,6 +2,7 @@ package hlmp.NetLayer;
 
 import java.net.InetAddress;
 
+import android.util.Log;
 import hlmp.NetLayer.Constants.OpSystemType;
 
 
@@ -54,6 +55,7 @@ public class NetData {
     public NetData()
     {
 //        pickNewIp();
+    	Log.d("NetData", "creacion del objeto para obtener los valores de configuracion");
         ipUdpMulticast = "224.0.0.2";
         tcpPort = 30001;
         udpPort = 30002;

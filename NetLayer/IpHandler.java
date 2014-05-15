@@ -1,17 +1,19 @@
 package hlmp.NetLayer;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
+import android.util.Log;
 import hlmp.NetLayer.Constants.*;
 import hlmp.NetLayer.Interfaces.ResetIpHandler;
 import hlmp.NetLayer.Interfaces.WifiHandler;
 
 public class IpHandler{
 
+	private String nameTagLog = "IpHandler";
 	/**
 	 * Handler para cambio de ip
 	 */
 	private ResetIpHandler resetIpHandler;
-
+	
 	/**
 	 * Thread que verifica la IP
 	 */
@@ -53,6 +55,7 @@ public class IpHandler{
 
 
 	public IpHandler(NetData netData , ResetIpHandler resetIpHandler, WifiHandler wifiHandler) {
+		Log.d(nameTagLog, "entro =D" );
 		this.wifiHandler = wifiHandler;
 		this.resetIpHandler = resetIpHandler;
 		this.netData = netData;
@@ -71,6 +74,7 @@ public class IpHandler{
 	 * Comienza la verificación fuerte
 	 */
 	public void startStrongDAD(){
+		Log.d(nameTagLog, "startStrongDAD" );
 		this.state = IphandlerState.STARTEDSTRONG;
 		this.checkIpThread.start();
 	}
@@ -79,6 +83,7 @@ public class IpHandler{
 	 * Comienza la verificación débil
 	 */
 	public void chageToWeakDAD(){
+		Log.d(nameTagLog, "chageToWeakDAD" );
 		this.state = IphandlerState.STARTEDWEAK;
 	}
 
@@ -86,6 +91,7 @@ public class IpHandler{
 	 * Detiene la verificación
 	 */
 	public void stop(){
+		Log.d(nameTagLog, "stop" );
 		
 		synchronized (stopLock){
 			this.state = IphandlerState.STOPPED;
@@ -102,6 +108,7 @@ public class IpHandler{
 	 * Verifica que no exista Ip duplicada en el sistema operativo, si gatilla resetIpDelegate, asegura que el Thread se detendrá
 	 */
 	private Thread getCheckIpThread(){
+		Log.d(nameTagLog, "getCheckIpThread" );
 		return new Thread(){
 
 			public void run(){
@@ -178,8 +185,8 @@ public class IpHandler{
 	 * Coloca una ip a la cola de ips para chequear
 	 * @param outterIp la ip a encolar
 	 */
-	public void put(String outterIp)
-	{
+	public void put(String outterIp){
+		Log.d(nameTagLog, "put" );
 		synchronized (queueLock){
 			this.queue.add(outterIp);
 		}

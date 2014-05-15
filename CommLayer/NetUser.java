@@ -1,16 +1,20 @@
 package hlmp.CommLayer;
+import java.net.InetAddress;
+import java.util.UUID;
 
-import hlmp.CommLayer.Constants.*;
+import android.util.Log;
+import hlmp.CommLayer.Constants.CommunicationQuality;
+import hlmp.CommLayer.Constants.NetUserQuality;
 import hlmp.NetLayer.NetData;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.UUID;
+
 
 /**
  * Datos de usuario dentro de la MANET
  */
 public class NetUser {
+	
+	private String nameTagLog = "NetUser";
 
 	/**
      * Id del usuario, esta variable se serializa
@@ -88,6 +92,7 @@ public class NetUser {
      */
     public NetUser(UUID id, String name, InetAddress ip, UUID[] neighborhood, NetData netData)
     {
+    	Log.d(nameTagLog, "entro =D" );
         this.id = id;
         this.name = name;
         this.ip = ip;
@@ -107,6 +112,7 @@ public class NetUser {
      */
     public void qualityUp(NetData netData)
     {
+    	Log.d(nameTagLog, "qualityUp" );
         setTimeOut(this.timeout + netData.getQualityRiseNetUser(), netData);
     }
 
@@ -115,6 +121,7 @@ public class NetUser {
      */
     public void qualityDown(NetData netData)
     {
+    	Log.d(nameTagLog, "qualityDown" );
         setTimeOut(this.timeout - 1, netData);
     }
     
@@ -125,6 +132,7 @@ public class NetUser {
      */
     private void setTimeOut(int newTimeOut, NetData netData) 
     {
+    	Log.d(nameTagLog, "setTimeOut" );
         if (newTimeOut > netData.getQualityMaxNetUser())
         {
             this.timeout = netData.getQualityMaxNetUser();

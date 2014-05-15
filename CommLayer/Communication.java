@@ -615,7 +615,7 @@ public class Communication implements CommHandlerI, RouterMessageErrorHandlerI {
             log("COMMUNICATION: set user ID");
             configuration.getNetUser().pickNewId();
             log("COMMUNICATION: router config");
-            updateRouter();
+            updateRouter("startNetworkingHandler");
             log("COMMUNICATION: timer on");
             timerStart();
             log("COMMUNICATION: detection on");
@@ -914,7 +914,7 @@ public class Communication implements CommHandlerI, RouterMessageErrorHandlerI {
 	            {
 					updateUserList();
 	                updateNeighborhood();
-	                updateRouter();
+	                updateRouter("getCommunicationTimerInterationThread");
 	                updateState();
 	                internalSendMessage(new ImAliveMessage());
 	            }
@@ -1112,9 +1112,11 @@ public class Communication implements CommHandlerI, RouterMessageErrorHandlerI {
     /**
      * Actualiza los parámetros del router
      */
-    private void updateRouter()
+    private void updateRouter(String tag)
     {
-        router.updateRouterTable(netHandler, configuration.getNetUser(), netUserList);
+        router.updateRouterTable(netHandler, configuration.getNetUser(), netUserList, tag);
+        //log("configuracion " + configuration);
+        //log("lalal "+ configuration.getNetUser());
         log("ROUTER: max list size: " + router.getMaxListSize() + " used: " + router.getListSize());
     }
 
